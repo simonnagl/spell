@@ -10,6 +10,7 @@ spell
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
+*.cov
 *.out
 
 # Dependency directories (remove the comment below to include it)
