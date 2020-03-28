@@ -7,11 +7,9 @@ v0.1.0
 
 spell - spell word(s) using a spelling alphabet.
 
-// tag::readme[]
-
 == Synopsis
 
-	spell [-hl] <word(s)>
+spell [-hl] <word(s)>
 
 == Examples
 
@@ -28,4 +26,3 @@ To set a default language you may use an alias:
 
 Copyright (C) 2020 Simon Nagl. +
 Free use of this software is granted under the terms of the MIT License.
-// end::readme[]

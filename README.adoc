@@ -1,6 +1,26 @@
 = spell
 
-image:https://github.com/simonnagl/spell/workflows/Go/badge.svg[Go,link=https://github.com/simonnagl/spell/actions?query=branch%3Amaster]
+image:https://github.com/simonnagl/spell/workflows/Go/badge.svg[Go,link=https://github.com/simonnagl/spell/actions?query=branch:master]
 image:https://coveralls.io/repos/github/simonnagl/spell/badge.svg?branch=master&t=47TqXT[Coverage Status,link=https://coveralls.io/github/simonnagl/spell?branch=master]
 
-include::man-page.adoc[tag=readme]
+spell word(s) using a spelling alphabet.
+
+== Synopsis
+
+	spell [-hl] <word(s)>
+
+== Examples
+
+To set a default language you may use an alias:
+
+	alias spell="spell -l de"
+
+== Options
+
+*-h* :: Print this usage note (Default: false)
+*-l* string:: Spelling alphabet to use (Default: en)
+
+== Copyright
+
+Copyright (C) 2020 Simon Nagl. +
+Free use of this software is granted under the terms of the MIT License.
