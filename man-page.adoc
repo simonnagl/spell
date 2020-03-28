@@ -1,0 +1,31 @@
+= spell(1)
+Simon Nagl
+v0.1.0
+:doctype: manpage
+
+== Name
+
+spell - spell word(s) using a spelling alphabet.
+
+// tag::readme[]
+
+== Synopsis
+
+	spell [-hl] <word(s)>
+
+== Examples
+
+To set a default language you may use an alias:
+
+	alias spell="spell -l de"
+
+== Options
+
+*-h* :: Print this usage note (Default: false)
+*-l* string:: Spelling alphabet to use (Default: en)
+
+== Copyright
+
+Copyright (C) 2020 Simon Nagl. +
+Free use of this software is granted under the terms of the MIT License.
+// end::readme[]
