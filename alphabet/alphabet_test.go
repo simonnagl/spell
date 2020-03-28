@@ -46,11 +46,11 @@ func TestForLanguageCode(t *testing.T) {
 		expected SpellingAlphabet
 	}
 	var allTestCase = []TestCase{
-		{"default", EN},
-		{"de", DE},
-		{"en", EN},
-		{"fr", FR},
-		{"nl", NL},
+		{"default", Lang["en"]},
+		{"de", Lang["de"]},
+		{"en", Lang["en"]},
+		{"fr", Lang["fr"]},
+		{"nl", Lang["nl"]},
 	}
 
 	for _, test := range allTestCase {

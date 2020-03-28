@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"io"
 	"os"
 	"strings"
@@ -42,4 +43,32 @@ func captureOutput(f func()) (string, error) {
 	}
 
 	return buf.String(), nil
+}
+
+func TestUsage(t *testing.T) {
+	flags := flag.CommandLine
+	defer func() {
+		flag.CommandLine = flags
+	}()
+	flag.CommandLine = &flag.FlagSet{}
+	DefineFlags()
+
+	o, err := captureOutput(usage)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	e := `Usage: spell [-hl] <word(s)> 
+
+Options:
+  -h	Print this usage note
+  -l string
+    	Spelling alphabet to use (default "en")
+
+Spelling alphabets:
+  de, en, fr, nl
+`
+	if o != e {
+		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, e)
+	}
 }
