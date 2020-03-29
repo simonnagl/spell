@@ -15,7 +15,7 @@ var alphabet = SpellingAlphabet{
 	"t":   "Theodor",
 }
 
-func testSpell(t *testing.T, allInputLetters string, expectedResult string) bool {
+func testSpell(t *testing.T, alphabet SpellingAlphabet, allInputLetters string, expectedResult string) bool {
 	return t.Run("Spell "+allInputLetters, func(t *testing.T) {
 		result := alphabet.Spell(allInputLetters)
 		if expectedResult != result {
@@ -26,18 +26,30 @@ func testSpell(t *testing.T, allInputLetters string, expectedResult string) bool
 
 func TestSpell_Alphabet(t *testing.T) {
 	for inputLetter, expectedResult := range alphabet {
-		testSpell(t, inputLetter, expectedResult)
-		testSpell(t, strings.Title(inputLetter), expectedResult)
+		testSpell(t, alphabet, inputLetter, expectedResult)
+		testSpell(t, alphabet, strings.Title(inputLetter), expectedResult)
 	}
 }
 
+func TestSpell_Lang(t *testing.T) {
+	for key, alphabet := range Lang {
+		t.Run(key, func(t *testing.T) {
+			for inputLetter, expectedResult := range alphabet {
+				testSpell(t, alphabet, inputLetter, expectedResult)
+				testSpell(t, alphabet, strings.Title(inputLetter), expectedResult)
+			}
+		})
+	}
+
+}
+
 func TestSpell_Words(t *testing.T) {
-	testSpell(t, "aä", "Anton Ärger")
-	testSpell(t, "Schlacht alt", "Schule Ludwig Anton Charlotte Theodor ' ' Anton Ludwig Theodor")
+	testSpell(t, alphabet, "aä", "Anton Ärger")
+	testSpell(t, alphabet, "Schlacht alt", "Schule Ludwig Anton Charlotte Theodor ' ' Anton Ludwig Theodor")
 }
 
 func TestSpell_SpecialCharacter(t *testing.T) {
-	testSpell(t, "?", "'?'")
+	testSpell(t, alphabet, "?", "'?'")
 }
 
 func TestForLanguageCode(t *testing.T) {
