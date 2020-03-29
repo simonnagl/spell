@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-var alphabet = SpellingAlphabet{
+var alphabet = SpellingAlphabet{m: map[string]string{
 	"a":   "Anton",
 	"ä":   "Ärger",
 	"l":   "Ludwig",
 	"sch": "Schule",
 	"ch":  "Charlotte",
 	"t":   "Theodor",
-}
+}}
 
 func testSpell(t *testing.T, alphabet SpellingAlphabet, allInputLetters string, expectedResult string) bool {
 	return t.Run("Spell "+allInputLetters, func(t *testing.T) {
@@ -25,22 +25,30 @@ func testSpell(t *testing.T, alphabet SpellingAlphabet, allInputLetters string, 
 }
 
 func TestSpell_Alphabet(t *testing.T) {
-	for inputLetter, expectedResult := range alphabet {
+	testSpellAlphabet(t, alphabet)
+}
+
+func testSpellAlphabet(t *testing.T, alphabet SpellingAlphabet) {
+	for inputLetter, expectedResult := range alphabet.m {
 		testSpell(t, alphabet, inputLetter, expectedResult)
-		testSpell(t, alphabet, strings.Title(inputLetter), expectedResult)
+		var titleLetter string
+		if alphabet.c == nil {
+			titleLetter = strings.ToTitle(inputLetter)
+		} else {
+			titleLetter = strings.ToTitleSpecial(*alphabet.c, inputLetter)
+		}
+		if inputLetter != titleLetter {
+			testSpell(t, alphabet, titleLetter, expectedResult)
+		}
 	}
 }
 
 func TestSpell_Lang(t *testing.T) {
 	for key, alphabet := range Lang {
 		t.Run(key, func(t *testing.T) {
-			for inputLetter, expectedResult := range alphabet {
-				testSpell(t, alphabet, inputLetter, expectedResult)
-				testSpell(t, alphabet, strings.Title(inputLetter), expectedResult)
-			}
+			testSpellAlphabet(t, alphabet)
 		})
 	}
-
 }
 
 func TestSpell_Words(t *testing.T) {
@@ -72,7 +80,6 @@ func TestForLanguageCode(t *testing.T) {
 				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet)
 			}
 		})
-
 	}
 
 }

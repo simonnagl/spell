@@ -66,7 +66,7 @@ Options:
     	Spelling alphabet to use (default "en")
 
 Spelling alphabets:
-  at, ch, de, en, fr, it, nl
+  at, ch, de, en, fr, it, nl, tr
 `
 	if o != e {
 		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, e)

@@ -3,9 +3,15 @@ package alphabet
 import (
 	"fmt"
 	"strings"
+	"unicode"
 )
 
-type SpellingAlphabet map[string]string
+type SpellingAlphabet struct {
+	// Map lower case keys to their phonetic form.
+	m map[string]string
+	// Language specific case mappings. Can be nil.
+	c *unicode.SpecialCase
+}
 
 func (sa SpellingAlphabet) Spell(allLetter string) string {
 	var sb strings.Builder
@@ -21,7 +27,13 @@ func (sa SpellingAlphabet) Spell(allLetter string) string {
 }
 
 func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
-	if value, ok := sa[strings.ToLower(key)]; ok {
+	var lowerKey string
+	if sa.c == nil {
+		lowerKey = strings.ToLower(key)
+	} else {
+		lowerKey = strings.ToLowerSpecial(*sa.c, key)
+	}
+	if value, ok := sa.m[lowerKey]; ok {
 		return key, value
 	} else {
 		if len(key) == 1 {
@@ -33,8 +45,8 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 }
 
 func ForLanguageCode(lang string) SpellingAlphabet {
-	a := Lang[lang]
-	if a != nil {
+	a, ok := Lang[lang]
+	if ok {
 		return a
 	} else {
 		return Lang["en"]
@@ -43,7 +55,7 @@ func ForLanguageCode(lang string) SpellingAlphabet {
 
 var Lang = map[string]SpellingAlphabet{
 	// ICAO / NATO
-	"en": {
+	"en": {m: map[string]string{
 		"a": "Alfa",
 		"b": "Bravo",
 		"c": "Charlie",
@@ -70,8 +82,8 @@ var Lang = map[string]SpellingAlphabet{
 		"x": "X-ray",
 		"y": "Yankee",
 		"z": "Zulu",
-	},
-	"fr": {
+	}},
+	"fr": {m: map[string]string{
 		"a": "Anatole",
 		"b": "Berthe",
 		"c": "Célestin",
@@ -98,7 +110,8 @@ var Lang = map[string]SpellingAlphabet{
 		"x": "Xavier",
 		"y": "Yvonne",
 		"z": "Zoé",
-	}, "nl": {
+	}},
+	"nl": {m: map[string]string{
 		"a": "Anna/Anton",
 		"b": "Bernard",
 		"c": "Cornelis",
@@ -125,9 +138,9 @@ var Lang = map[string]SpellingAlphabet{
 		"x": "Xanthippe",
 		"y": "Ypsilon",
 		"z": "Zaandam",
-	},
+	}},
 	// DIN5009
-	"de": {
+	"de": {m: map[string]string{
 		"a":   "Anton",
 		"ä":   "Ärger",
 		"b":   "Berta",
@@ -161,9 +174,9 @@ var Lang = map[string]SpellingAlphabet{
 		"y":   "Ypsilon",
 		"z":   "Zacharias",
 		" ":   "Leerzeichen",
-	},
+	}},
 	// ÖNORM A 1081
-	"at": {
+	"at": {m: map[string]string{
 		"a":   "Anton",
 		"ä":   "Ärger",
 		"b":   "Berta",
@@ -196,8 +209,8 @@ var Lang = map[string]SpellingAlphabet{
 		"x":   "Xaver",
 		"y":   "Ypsilon",
 		"z":   "Zürich",
-	},
-	"ch": {
+	}},
+	"ch": {m: map[string]string{
 		"a":  "Anna",
 		"ä":  "Äsch",
 		"b":  "Berta",
@@ -228,8 +241,8 @@ var Lang = map[string]SpellingAlphabet{
 		"x":  "Xaver",
 		"y":  "Yverdon",
 		"z":  "Zürich",
-	},
-	"it": {
+	}},
+	"it": {m: map[string]string{
 		"a": "Ancona",
 		"b": "Bari",
 		"c": "Como",
@@ -256,5 +269,37 @@ var Lang = map[string]SpellingAlphabet{
 		"x": "Xilofono",
 		"y": "Ipsilon",
 		"z": "Zara",
-	},
+	}},
+	"tr": {m: map[string]string{
+		"a": "Adana",
+		"b": "Bolu",
+		"c": "Ceyhan",
+		"ç": "Çanakkale",
+		"d": "Denizli",
+		"e": "Edirne",
+		"f": "Fatsa",
+		"g": "Giresun",
+		"ğ": "yumuşak G",
+		"h": "Hatay",
+		"i": "İzmir",
+		"ı": "Isparta",
+		"j": "jandarma",
+		"k": "Kars",
+		"l": "Lüleburgaz",
+		"m": "Muş",
+		"n": "Niğde",
+		"o": "Ordu",
+		"ö": "Ödemiş",
+		"p": "Polatlı",
+		"r": "Rize",
+		"s": "Sinop",
+		"ş": "Şırnak",
+		"t": "Tokat",
+		"u": "Uşak",
+		"ü": "Ünye",
+		"v": "Van",
+		"w": "duble V",
+		"y": "Yozgat",
+		"z": "Yozgat"},
+		c: &unicode.TurkishCase},
 }
