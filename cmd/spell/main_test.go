@@ -53,7 +53,7 @@ func TestUsage(t *testing.T) {
 	flag.CommandLine = &flag.FlagSet{}
 	DefineFlags()
 
-	o, err := captureOutput(usage)
+	o, err := captureOutput(printUsage)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,11 +62,21 @@ func TestUsage(t *testing.T) {
 
 Options:
   -h	Print this usage note
-  -l string
+  -l alphabet
     	Spelling alphabet to use (default "en")
 
 Spelling alphabets:
-  at, ch, cs, de, en, fi, fr, it, nl, sw, tr
+  cs    Czech             čeština
+  de-AT Austrian German   Österreichisches Deutsch
+  de-CH Swiss High German Schweizer Hochdeutsch
+  de-DE German (Germany)  Deutsch
+  en    English           English
+  fi    Finnish           suomi
+  fr    French            français
+  it    Italian           italiano
+  nl    Dutch             Nederlands
+  sv    Swedish           svenska
+  tr    Turkish           Türkçe
 `
 	if o != e {
 		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, e)

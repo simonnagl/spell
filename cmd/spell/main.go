@@ -4,18 +4,19 @@ import (
 	"flag"
 	"fmt"
 	"github.com/simonnagl/spell/alphabet"
+	"golang.org/x/text/language/display"
 	"sort"
 	"strings"
 )
 
 func main() {
-	flag.CommandLine.Usage = usage
+	flag.CommandLine.Usage = printUsage
 	printHelp, lang := DefineFlags()
 
 	flag.Parse()
 
 	if *printHelp || nothingToSpell() {
-		usage()
+		printUsage()
 		return
 	}
 
@@ -26,7 +27,7 @@ func main() {
 }
 
 func DefineFlags() (printHelp *bool, lang *string) {
-	lang = flag.String("l", "en", "Spelling alphabet to use")
+	lang = flag.String("l", "en", "Spelling `alphabet` to use")
 	printHelp = flag.Bool("h", false, "Print this usage note")
 	return
 }
@@ -44,18 +45,42 @@ func synopsis() string {
 	return fmt.Sprintf("spell [-%s] <word(s)>", allName)
 }
 
-func usage() {
+func printUsage() {
 	fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s \n\nOptions:\n", synopsis())
 	flag.CommandLine.PrintDefaults()
-	fmt.Fprintf(flag.CommandLine.Output(), "\nSpelling alphabets:\n  %s\n", alphabets())
+	fmt.Fprintf(flag.CommandLine.Output(), "\nSpelling alphabets:\n")
+	printAlphabets()
 }
 
-func alphabets() string {
-	keys := make([]string, 0, len(alphabet.Lang))
+func printAlphabets() {
+	type Alphabet struct {
+		tag         string
+		englishName string
+		selfName    string
+	}
+
+	result := make([]Alphabet, 0, len(alphabet.Lang))
+	var displayEnglish = display.English.Tags()
 
 	for k := range alphabet.Lang {
-		keys = append(keys, k)
+		result = append(result, Alphabet{k.String(), displayEnglish.Name(k), display.Self.Name(k)})
 	}
-	sort.Strings(keys)
-	return strings.Join(keys, ", ")
+
+	sort.Slice(result, func(i int, j int) bool {
+		return result[i].tag < result[j].tag
+	})
+
+	var maxKeyLen, maxEnglisLen int
+	for _, f := range result {
+		if maxKeyLen < len(f.tag) {
+			maxKeyLen = len(f.tag)
+		}
+		if maxEnglisLen < len(f.englishName) {
+			maxEnglisLen = len(f.englishName)
+		}
+	}
+
+	for _, f := range result {
+		fmt.Fprintf(flag.CommandLine.Output(), "  %-*v%-*v%s\n", maxKeyLen+1, f.tag, maxEnglisLen+1, f.englishName, f.selfName)
+	}
 }

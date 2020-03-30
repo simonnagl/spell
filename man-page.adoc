@@ -20,7 +20,7 @@ To set a default language you may use an alias:
 == Options
 
 *-h* :: Print this usage note (Default: false)
-*-l* string:: Spelling alphabet to use (Default: en)
+*-l* alphabet:: Spelling alphabet to use (Default: en)
 
 == Copyright
 

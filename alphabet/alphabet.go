@@ -2,6 +2,7 @@ package alphabet
 
 import (
 	"fmt"
+	"golang.org/x/text/language"
 	"strings"
 	"unicode"
 )
@@ -45,17 +46,22 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 }
 
 func ForLanguageCode(lang string) SpellingAlphabet {
-	a, ok := Lang[lang]
+	defaultLang := language.English
+	languageTag, err := language.Parse(lang)
+	if err != nil {
+		return Lang[defaultLang]
+	}
+	a, ok := Lang[languageTag]
 	if ok {
 		return a
 	} else {
-		return Lang["en"]
+		return Lang[defaultLang]
 	}
 }
 
-var Lang = map[string]SpellingAlphabet{
+var Lang = map[language.Tag]SpellingAlphabet{
 	// ICAO / NATO
-	"en": {m: map[string]string{
+	language.English: {m: map[string]string{
 		"a": "Alfa",
 		"b": "Bravo",
 		"c": "Charlie",
@@ -83,7 +89,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y": "Yankee",
 		"z": "Zulu",
 	}},
-	"fr": {m: map[string]string{
+	language.French: {m: map[string]string{
 		"a": "Anatole",
 		"b": "Berthe",
 		"c": "Célestin",
@@ -111,7 +117,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y": "Yvonne",
 		"z": "Zoé",
 	}},
-	"nl": {m: map[string]string{
+	language.Dutch: {m: map[string]string{
 		"a": "Anna/Anton",
 		"b": "Bernard",
 		"c": "Cornelis",
@@ -140,7 +146,7 @@ var Lang = map[string]SpellingAlphabet{
 		"z": "Zaandam",
 	}},
 	// DIN5009
-	"de": {m: map[string]string{
+	language.MustParse("de-DE"): {m: map[string]string{
 		"a":   "Anton",
 		"ä":   "Ärger",
 		"b":   "Berta",
@@ -176,7 +182,7 @@ var Lang = map[string]SpellingAlphabet{
 		" ":   "Leerzeichen",
 	}},
 	// ÖNORM A 1081
-	"at": {m: map[string]string{
+	language.MustParse("de-AT"): {m: map[string]string{
 		"a":   "Anton",
 		"ä":   "Ärger",
 		"b":   "Berta",
@@ -210,7 +216,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y":   "Ypsilon",
 		"z":   "Zürich",
 	}},
-	"ch": {m: map[string]string{
+	language.MustParse("de-CH"): {m: map[string]string{
 		"a":  "Anna",
 		"ä":  "Äsch",
 		"b":  "Berta",
@@ -242,7 +248,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y":  "Yverdon",
 		"z":  "Zürich",
 	}},
-	"it": {m: map[string]string{
+	language.Italian: {m: map[string]string{
 		"a": "Ancona",
 		"b": "Bari",
 		"c": "Como",
@@ -270,7 +276,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y": "Ipsilon",
 		"z": "Zara",
 	}},
-	"tr": {m: map[string]string{
+	language.Turkish: {m: map[string]string{
 		"a": "Adana",
 		"b": "Bolu",
 		"c": "Ceyhan",
@@ -304,7 +310,7 @@ var Lang = map[string]SpellingAlphabet{
 	},
 		c: &unicode.TurkishCase,
 	},
-	"sw": {m: map[string]string{
+	language.Swedish: {m: map[string]string{
 		"a": "Adam",
 		"å": "Åke",
 		"ä": "Ärlig",
@@ -336,7 +342,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y": "Yngve",
 		"z": "Zäta",
 	}},
-	"fi": {m: map[string]string{
+	language.Finnish: {m: map[string]string{
 		"a": "Aarne",
 		"ä": "Äiti",
 		"å": "Åke",
@@ -367,7 +373,7 @@ var Lang = map[string]SpellingAlphabet{
 		"y": "Yrjö",
 		"z": "Tseta",
 	}},
-	"cs": {m: map[string]string{
+	language.Czech: {m: map[string]string{
 		"a":  "Adam",
 		"á":  "a s čárkou",
 		"b":  "Božena",

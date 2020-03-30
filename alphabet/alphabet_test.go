@@ -1,6 +1,7 @@
 package alphabet
 
 import (
+	"golang.org/x/text/language"
 	"reflect"
 	"strings"
 	"testing"
@@ -45,7 +46,7 @@ func testSpellAlphabet(t *testing.T, alphabet SpellingAlphabet) {
 
 func TestSpell_Lang(t *testing.T) {
 	for key, alphabet := range Lang {
-		t.Run(key, func(t *testing.T) {
+		t.Run(key.String(), func(t *testing.T) {
 			testSpellAlphabet(t, alphabet)
 		})
 	}
@@ -66,11 +67,11 @@ func TestForLanguageCode(t *testing.T) {
 		expected SpellingAlphabet
 	}
 	var allTestCase = []TestCase{
-		{"default", Lang["en"]},
-		{"de", Lang["de"]},
-		{"en", Lang["en"]},
-		{"fr", Lang["fr"]},
-		{"nl", Lang["nl"]},
+		{"default", Lang[language.MustParse("en")]},
+		{"de-DE", Lang[language.MustParse("de-DE")]},
+		{"en", Lang[language.MustParse("en")]},
+		{"fr", Lang[language.MustParse("fr")]},
+		{"nl", Lang[language.MustParse("nl")]},
 	}
 
 	for _, test := range allTestCase {
