@@ -57,6 +57,9 @@ spell - spell word(s) using a spelling alphabet.
 == Options
 
 %s
+== Spelling alphabets
+
+%s
 == Examples
 
 To set a default language you may use an alias:
@@ -69,7 +72,8 @@ Copyright (C) 2020 Simon Nagl. +
 Free use of this software is granted under the terms of the MIT License.
 `,
 		synopsis(),
-		options())
+		options(),
+		alphabetsManpage())
 }
 
 func options() string {
@@ -122,6 +126,14 @@ spell word(s) using a spelling alphabet.
 == Options
 
 %s
+== Spelling alphabets
+
+[cols="h,2*"]
+|===
+
+%s
+|===
+
 == Examples
 
 To set a default language you may use an alias:
@@ -134,7 +146,8 @@ Copyright (C) 2020 Simon Nagl. +
 Free use of this software is granted under the terms of the MIT License.
 `,
 		synopsis(),
-		options())
+		options(),
+		alphabetsReadme())
 
 	if string(commitedReadme) != generatedManpage {
 		fName := "readme.test.adoc"
@@ -151,4 +164,27 @@ Free use of this software is granted under the terms of the MIT License.
 			"The README is also commited because we want to make it readable.",
 			"Fix the generated README or adopt the commited README to fix this test.")
 	}
+}
+
+func alphabetsManpage() string {
+	return formatAllAplphabet(func(a alphabetView) string {
+		return fmt.Sprintf("*%s* :: %s -- %s\n", a.tag, a.englishName, a.selfName)
+	})
+}
+
+func formatAllAplphabet(format func(a alphabetView) string) string {
+	allAlphabet := alphabetViewModel()
+	buf := bytes.Buffer{}
+
+	for _, a := range allAlphabet {
+		buf.WriteString(format(a))
+	}
+
+	return buf.String()
+}
+
+func alphabetsReadme() string {
+	return formatAllAplphabet(func(a alphabetView) string {
+		return fmt.Sprintln("|", a.tag, "|", a.englishName, "|", a.selfName)
+	})
 }

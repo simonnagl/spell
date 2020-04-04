@@ -16,6 +16,20 @@ spell [-hl] <word(s)>
 *-h* :: Print this usage note (Default: false)
 *-l* alphabet:: Spelling alphabet to use (Default: en)
 
+== Spelling alphabets
+
+*cs* :: Czech -- čeština
+*de-AT* :: Austrian German -- Österreichisches Deutsch
+*de-CH* :: Swiss High German -- Schweizer Hochdeutsch
+*de-DE* :: German (Germany) -- Deutsch
+*en* :: English -- English
+*fi* :: Finnish -- suomi
+*fr* :: French -- français
+*it* :: Italian -- italiano
+*nl* :: Dutch -- Nederlands
+*sv* :: Swedish -- svenska
+*tr* :: Turkish -- Türkçe
+
 == Examples
 
 To set a default language you may use an alias:

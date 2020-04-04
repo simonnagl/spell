@@ -52,26 +52,34 @@ func printUsage() {
 	printAlphabets()
 }
 
-func printAlphabets() {
-	type Alphabet struct {
-		tag         string
-		englishName string
-		selfName    string
-	}
+type alphabetView struct {
+	tag         string
+	englishName string
+	selfName    string
+}
 
-	result := make([]Alphabet, 0, len(alphabet.Lang))
+func alphabetViewModel() []alphabetView {
+
+	result := make([]alphabetView, 0, len(alphabet.Lang))
 	var displayEnglish = display.English.Tags()
 
 	for k := range alphabet.Lang {
-		result = append(result, Alphabet{k.String(), displayEnglish.Name(k), display.Self.Name(k)})
+		result = append(result, alphabetView{k.String(), displayEnglish.Name(k), display.Self.Name(k)})
 	}
 
 	sort.Slice(result, func(i int, j int) bool {
 		return result[i].tag < result[j].tag
 	})
 
+	return result
+}
+
+func printAlphabets() {
+
+	allAlphabet := alphabetViewModel()
+
 	var maxKeyLen, maxEnglisLen int
-	for _, f := range result {
+	for _, f := range allAlphabet {
 		if maxKeyLen < len(f.tag) {
 			maxKeyLen = len(f.tag)
 		}
@@ -80,7 +88,7 @@ func printAlphabets() {
 		}
 	}
 
-	for _, f := range result {
+	for _, f := range allAlphabet {
 		fmt.Fprintf(flag.CommandLine.Output(), "  %-*v%-*v%s\n", maxKeyLen+1, f.tag, maxEnglisLen+1, f.englishName, f.selfName)
 	}
 }
