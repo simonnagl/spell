@@ -11,16 +11,16 @@ spell - spell word(s) using a spelling alphabet.
 
 spell [-hl] <word(s)>
 
+== Options
+
+*-h* :: Print this usage note (Default: false)
+*-l* alphabet:: Spelling alphabet to use (Default: en)
+
 == Examples
 
 To set a default language you may use an alias:
 
 	alias spell="spell -l de"
-
-== Options
-
-*-h* :: Print this usage note (Default: false)
-*-l* alphabet:: Spelling alphabet to use (Default: en)
 
 == Copyright
 

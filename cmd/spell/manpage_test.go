@@ -54,15 +54,15 @@ spell - spell word(s) using a spelling alphabet.
 
 %s
 
+== Options
+
+%s
 == Examples
 
 To set a default language you may use an alias:
 
 	alias spell="spell -l de"
 
-== Options
-
-%s
 == Copyright
 
 Copyright (C) 2020 Simon Nagl. +
@@ -119,15 +119,15 @@ spell word(s) using a spelling alphabet.
 
 	%s
 
+== Options
+
+%s
 == Examples
 
 To set a default language you may use an alias:
 
 	alias spell="spell -l de"
 
-== Options
-
-%s
 == Copyright
 
 Copyright (C) 2020 Simon Nagl. +
