@@ -2,7 +2,6 @@ package alphabet
 
 import (
 	"golang.org/x/text/language"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -45,9 +44,9 @@ func testSpellAlphabet(t *testing.T, alphabet SpellingAlphabet) {
 }
 
 func TestSpell_Lang(t *testing.T) {
-	for key, alphabet := range Lang {
-		t.Run(key.String(), func(t *testing.T) {
-			testSpellAlphabet(t, alphabet)
+	for _, a := range List {
+		t.Run(a.Lang.String(), func(t *testing.T) {
+			testSpellAlphabet(t, a)
 		})
 	}
 }
@@ -64,21 +63,23 @@ func TestSpell_SpecialCharacter(t *testing.T) {
 func TestForLanguageCode(t *testing.T) {
 	type TestCase struct {
 		lang     string
-		expected SpellingAlphabet
+		expected language.Tag
 	}
 	var allTestCase = []TestCase{
-		{"default", Lang[language.MustParse("en")]},
-		{"de-DE", Lang[language.MustParse("de-DE")]},
-		{"en", Lang[language.MustParse("en")]},
-		{"fr", Lang[language.MustParse("fr")]},
-		{"nl", Lang[language.MustParse("nl")]},
+		{"default", language.MustParse("en")},
+		{"de-DE", language.MustParse("de-DE")},
+		{"en", language.MustParse("en")},
+		{"fr", language.MustParse("fr")},
+		{"nl", language.MustParse("nl")},
+		{"fr-CH", language.MustParse("fr")},
+		{"zh", language.MustParse("en")},
 	}
 
 	for _, test := range allTestCase {
 		t.Run(test.lang, func(t *testing.T) {
 			var alphabet = ForLanguageCode(test.lang)
-			if !reflect.DeepEqual(test.expected, alphabet) {
-				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet)
+			if test.expected != alphabet.Lang {
+				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet.Lang)
 			}
 		})
 	}

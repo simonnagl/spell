@@ -60,18 +60,19 @@ type alphabetView struct {
 
 func alphabetViewModel() []alphabetView {
 
-	result := make([]alphabetView, 0, len(alphabet.Lang))
+	allAlphabetView := make([]alphabetView, 0, len(alphabet.List))
 	var displayEnglish = display.English.Tags()
 
-	for k := range alphabet.Lang {
-		result = append(result, alphabetView{k.String(), displayEnglish.Name(k), display.Self.Name(k)})
+	for _, a := range alphabet.List {
+		lang := a.Lang
+		allAlphabetView = append(allAlphabetView, alphabetView{lang.String(), displayEnglish.Name(lang), display.Self.Name(lang)})
 	}
 
-	sort.Slice(result, func(i int, j int) bool {
-		return result[i].tag < result[j].tag
+	sort.Slice(allAlphabetView, func(i int, j int) bool {
+		return allAlphabetView[i].tag < allAlphabetView[j].tag
 	})
 
-	return result
+	return allAlphabetView
 }
 
 func printAlphabets() {
