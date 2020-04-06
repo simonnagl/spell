@@ -66,17 +66,25 @@ Options:
     	Spelling alphabet to use (default "en")
 
 Spelling alphabets:
-  cs    Czech             čeština
-  de-AT Austrian German   Österreichisches Deutsch
-  de-CH Swiss High German Schweizer Hochdeutsch
-  de-DE German (Germany)  Deutsch
-  en    English           English
-  fi    Finnish           suomi
-  fr    French            français
-  it    Italian           italiano
-  nl    Dutch             Nederlands
-  sv    Swedish           svenska
-  tr    Turkish           Türkçe
+  cs    Czech                čeština
+  da    Danish               dansk
+  de-AT Austrian German      Österreichisches Deutsch
+  de-CH Swiss High German    Schweizer Hochdeutsch
+  de-DE German (Germany)     Deutsch
+  en    English              English
+  en-GB British English      British English
+  es    Spanish              español
+  fi    Finnish              suomi
+  fr    French               français
+  it    Italian              italiano
+  nl    Dutch                Nederlands
+  no    Norwegian Bokmål     norsk bokmål
+  pt-BR Brazilian Portuguese português
+  pt-PT European Portuguese  português europeu
+  ro    Romanian             română
+  sl    Slovenian            slovenščina
+  sv    Swedish              svenska
+  tr    Turkish              Türkçe
 `
 	if o != e {
 		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, e)
