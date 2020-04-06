@@ -83,5 +83,10 @@ func TestForLanguageCode(t *testing.T) {
 			}
 		})
 	}
+}
 
+func BenchmarkSpellingAlphabet_Spell(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		List[0].Spell("Donaudampfschiffahrtsgesellschaftskapitänsmützenspitze")
+	}
 }

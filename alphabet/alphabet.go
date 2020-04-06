@@ -17,9 +17,17 @@ type SpellingAlphabet struct {
 }
 
 func (sa SpellingAlphabet) Spell(allLetter string) string {
+	maxKeyLen := sa.maxMKeyLen()
+
 	var sb strings.Builder
 	for i := 0; i < len(allLetter); {
-		key, value := sa.spellFirstMatch(allLetter[i:])
+
+		matchGroup := allLetter[i:]
+		if len(matchGroup) > maxKeyLen {
+			matchGroup = matchGroup[:maxKeyLen]
+		}
+
+		key, value := sa.spellFirstMatch(matchGroup)
 		i += len(key)
 		sb.WriteString(value)
 		if i != len(allLetter) {
@@ -27,6 +35,16 @@ func (sa SpellingAlphabet) Spell(allLetter string) string {
 		}
 	}
 	return sb.String()
+}
+
+func (sa SpellingAlphabet) maxMKeyLen() int {
+	var maxKeyLen int
+	for key := range sa.m {
+		if maxKeyLen < len(key) {
+			maxKeyLen = len(key)
+		}
+	}
+	return maxKeyLen
 }
 
 func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
