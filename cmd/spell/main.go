@@ -9,13 +9,27 @@ import (
 	"strings"
 )
 
+var (
+	printHelp    *bool
+	printVersion *bool
+	lang         *string
+)
+
 func main() {
 	flag.CommandLine.Usage = printUsage
-	printHelp, lang := DefineFlags()
+	DefineFlags()
 
 	flag.Parse()
 
-	if *printHelp || nothingToSpell() {
+	if *printHelp {
+		printUsage()
+		return
+	}
+	if *printVersion {
+		fmt.Fprintln(flag.CommandLine.Output(), "spell 0.1.0")
+		return
+	}
+	if nothingToSpell() {
 		printUsage()
 		return
 	}
@@ -26,10 +40,10 @@ func main() {
 	fmt.Println(a.Spell(args))
 }
 
-func DefineFlags() (printHelp *bool, lang *string) {
+func DefineFlags() {
 	lang = flag.String("l", "en", "Spelling `alphabet` to use")
 	printHelp = flag.Bool("h", false, "Print this usage note")
-	return
+	printVersion = flag.Bool("v", false, "Print version info")
 }
 
 func nothingToSpell() bool {

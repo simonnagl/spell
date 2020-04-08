@@ -7,12 +7,13 @@ spell word(s) using a spelling alphabet.
 
 == Synopsis
 
-	spell [-hl] <word(s)>
+	spell [-hlv] <word(s)>
 
 == Options
 
 *-h* :: Print this usage note (Default: false)
 *-l* alphabet:: Spelling alphabet to use (Default: en)
+*-v* :: Print version info (Default: false)
 
 == Spelling alphabets
 

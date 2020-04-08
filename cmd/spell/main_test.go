@@ -20,6 +20,22 @@ func TestMain_EmtpyArgs(t *testing.T) {
 	}
 }
 
+func testMain(t *testing.T, arg string, expected string) {
+	cleanup := resetFlagsAndArgs()
+	defer cleanup()
+
+	os.Args = append(os.Args, arg)
+
+	o, err := captureOutput(main)
+	if err != nil {
+		t.Fatal("Could not capture output of main().", err)
+	}
+
+	if expected != o {
+		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, expected)
+	}
+}
+
 func captureOutput(f func()) (string, error) {
 	r, w, err := os.Pipe()
 	if err != nil {
@@ -45,25 +61,25 @@ func captureOutput(f func()) (string, error) {
 	return buf.String(), nil
 }
 
-func TestUsage(t *testing.T) {
+func resetFlagsAndArgs() (cleanup func()) {
 	flags := flag.CommandLine
-	defer func() {
-		flag.CommandLine = flags
-	}()
 	flag.CommandLine = &flag.FlagSet{}
-	DefineFlags()
-
-	o, err := captureOutput(printUsage)
-	if err != nil {
-		t.Fatal(err)
+	args := os.Args
+	os.Args = []string{"spell"}
+	return func() {
+		flag.CommandLine = flags
+		os.Args = args
 	}
+}
 
-	e := `Usage: spell [-hl] <word(s)> 
+func TestMain_Usage(t *testing.T) {
+	e := `Usage: spell [-hlv] <word(s)> 
 
 Options:
   -h	Print this usage note
   -l alphabet
     	Spelling alphabet to use (default "en")
+  -v	Print version info
 
 Spelling alphabets:
   cs    Czech                čeština
@@ -86,7 +102,9 @@ Spelling alphabets:
   sv    Swedish              svenska
   tr    Turkish              Türkçe
 `
-	if o != e {
-		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, e)
-	}
+	testMain(t, "-h", e)
+}
+
+func TestMain_Version(t *testing.T) {
+	testMain(t, "-v", "spell 0.1.0\n")
 }
