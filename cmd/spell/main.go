@@ -26,7 +26,7 @@ func main() {
 		return
 	}
 	if *printVersion {
-		fmt.Fprintln(flag.CommandLine.Output(), "spell 0.1.0")
+		fmt.Fprintln(flag.CommandLine.Output(), "spell", Version)
 		return
 	}
 	if nothingToSpell() {

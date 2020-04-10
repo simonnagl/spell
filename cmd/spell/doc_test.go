@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/simonnagl/spell/test"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -34,11 +35,8 @@ func readCommitedManpage(t *testing.T) string {
 }
 
 func generateManpage() string {
-	flags := flag.CommandLine
-	defer func() {
-		flag.CommandLine = flags
-	}()
-	flag.CommandLine = &flag.FlagSet{}
+	cleanup := test.ClearCommandLine()
+	defer cleanup()
 	DefineFlags()
 
 	return fmt.Sprintf(`= spell(1)
@@ -105,11 +103,8 @@ func TestReadme(t *testing.T) {
 		t.Fatal("Could not read file", commitedReadmeName, err)
 	}
 
-	flags := flag.CommandLine
-	defer func() {
-		flag.CommandLine = flags
-	}()
-	flag.CommandLine = &flag.FlagSet{}
+	cleanup := test.ClearCommandLine()
+	defer cleanup()
 	DefineFlags()
 
 	generatedManpage := fmt.Sprintf(`= spell

@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"flag"
+	"github.com/simonnagl/spell/test"
 	"io"
 	"os"
 	"strings"
@@ -21,7 +21,7 @@ func TestMain_EmtpyArgs(t *testing.T) {
 }
 
 func testMain(t *testing.T, arg string, expected string) {
-	cleanup := resetFlagsAndArgs()
+	cleanup := test.ClearCommandLine()
 	defer cleanup()
 
 	os.Args = append(os.Args, arg)
@@ -59,17 +59,6 @@ func captureOutput(f func()) (string, error) {
 	}
 
 	return buf.String(), nil
-}
-
-func resetFlagsAndArgs() (cleanup func()) {
-	flags := flag.CommandLine
-	flag.CommandLine = &flag.FlagSet{}
-	args := os.Args
-	os.Args = []string{"spell"}
-	return func() {
-		flag.CommandLine = flags
-		os.Args = args
-	}
 }
 
 func TestMain_Usage(t *testing.T) {
