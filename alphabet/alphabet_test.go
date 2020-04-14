@@ -44,7 +44,7 @@ func testSpellAlphabet(t *testing.T, alphabet SpellingAlphabet) {
 }
 
 func TestSpell_Lang(t *testing.T) {
-	for _, a := range List {
+	for _, a := range All {
 		t.Run(a.Lang.String(), func(t *testing.T) {
 			testSpellAlphabet(t, a)
 		})
@@ -87,6 +87,6 @@ func TestForLanguageCode(t *testing.T) {
 
 func BenchmarkSpellingAlphabet_Spell(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		List[0].Spell("Donaudampfschiffahrtsgesellschaftskapitänsmützenspitze")
+		All[0].Spell("Donaudampfschiffahrtsgesellschaftskapitänsmützenspitze")
 	}
 }

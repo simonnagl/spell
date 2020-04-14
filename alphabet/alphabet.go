@@ -1,3 +1,4 @@
+// Package alphabet implements word-spelling alphabets. Clients should not use this internal package, used by github.com/simonnagl/spell/cmd/spell.
 package alphabet
 
 import (
@@ -7,8 +8,10 @@ import (
 	"unicode"
 )
 
+// SpellingAlphabet represents a word-spelling alphabet.
+//
+// SpellingAlphabet is a set of words used to pronounce the letters of an alphabet in oral communication.
 type SpellingAlphabet struct {
-	// Language which uses this spelling alphabet.
 	Lang language.Tag
 	// Map lower case keys to their phonetic form.
 	m map[string]string
@@ -16,13 +19,14 @@ type SpellingAlphabet struct {
 	c *unicode.SpecialCase
 }
 
-func (sa SpellingAlphabet) Spell(allLetter string) string {
+// Spell generates the text to speak for spelling text.
+func (sa SpellingAlphabet) Spell(text string) string {
 	maxKeyLen := sa.maxMKeyLen()
 
 	var sb strings.Builder
-	for i := 0; i < len(allLetter); {
+	for i := 0; i < len(text); {
 
-		matchGroup := allLetter[i:]
+		matchGroup := text[i:]
 		if len(matchGroup) > maxKeyLen {
 			matchGroup = matchGroup[:maxKeyLen]
 		}
@@ -30,7 +34,7 @@ func (sa SpellingAlphabet) Spell(allLetter string) string {
 		key, value := sa.spellFirstMatch(matchGroup)
 		i += len(key)
 		sb.WriteString(value)
-		if i != len(allLetter) {
+		if i != len(text) {
 			sb.WriteRune(' ')
 		}
 	}
@@ -65,10 +69,14 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 	}
 }
 
+// ForLanguageCode finds the best matching SpellingAlphabet for a BCP 47 language tag.
+//
+// ForLanguageCode uses golang.org/x/text/language for finding the best match.
+// If there is no match, 'en' is used as the default SpellingAlphabet.
 func ForLanguageCode(lang string) SpellingAlphabet {
 
-	tags := make([]language.Tag, 0, len(List))
-	for _, alphabet := range List {
+	tags := make([]language.Tag, 0, len(All))
+	for _, alphabet := range All {
 		tags = append(tags, alphabet.Lang)
 	}
 
@@ -76,17 +84,16 @@ func ForLanguageCode(lang string) SpellingAlphabet {
 
 	tag, err := language.Parse(lang)
 	if err != nil {
-		return List[0]
+		return All[0]
 	}
 	_, i, _ := matcher.Match(tag)
 
-	return List[i]
+	return All[i]
 }
 
-// List of all supported spelling alphabets.
-var List = []SpellingAlphabet{
-	// ICAO / NATO
-	{
+// All implemented SpellingAlphabet.
+var All = []SpellingAlphabet{
+	{ // ICAO / NATO
 		Lang: language.English,
 		m: map[string]string{
 			"a": "Alfa",
@@ -206,9 +213,7 @@ var List = []SpellingAlphabet{
 			"y": "Ypsilon",
 			"z": "Zaandam",
 		},
-	},
-	// DIN5009
-	{
+	}, { // DIN5009
 		Lang: language.MustParse("de-DE"),
 		m: map[string]string{
 			"a":   "Anton",
@@ -245,9 +250,7 @@ var List = []SpellingAlphabet{
 			"z":   "Zacharias",
 			" ":   "Leerzeichen",
 		},
-	},
-	// ÖNORM A 1081
-	{
+	}, { // ÖNORM A 1081
 		Lang: language.MustParse("de-AT"),
 		m: map[string]string{
 			"a":   "Anton",
@@ -380,7 +383,8 @@ var List = []SpellingAlphabet{
 			"y":  "Yolanda",
 			"z":  "Zaragoza",
 		},
-	}, {Lang: language.Turkish,
+	}, {
+		Lang: language.Turkish,
 		m: map[string]string{
 			"a": "Adana",
 			"b": "Bolu",
@@ -546,8 +550,7 @@ var List = []SpellingAlphabet{
 			"y": "Yrsa",
 			"z": "Zackarias",
 		},
-	},
-	{
+	}, {
 		Lang: language.Czech,
 		m: map[string]string{
 			"a":  "Adam",

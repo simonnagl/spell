@@ -74,10 +74,10 @@ type alphabetView struct {
 
 func alphabetViewModel() []alphabetView {
 
-	allAlphabetView := make([]alphabetView, 0, len(alphabet.List))
+	allAlphabetView := make([]alphabetView, 0, len(alphabet.All))
 	var displayEnglish = display.English.Tags()
 
-	for _, a := range alphabet.List {
+	for _, a := range alphabet.All {
 		lang := a.Lang
 		allAlphabetView = append(allAlphabetView, alphabetView{lang.String(), displayEnglish.Name(lang), display.Self.Name(lang)})
 	}

@@ -1,3 +1,4 @@
+// Package test provides internal helper functions for tests. Clients should not use this internal package.
 package test
 
 import (
