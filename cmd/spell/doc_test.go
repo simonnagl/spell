@@ -3,15 +3,15 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"github.com/simonnagl/spell/test"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 	"text/template"
 )
 
-const manpageTemplate = `= spell(1)
+const manpageTmpl = `= spell(1)
 Simon Nagl
 v0.1.0
 :doctype: manpage
@@ -25,12 +25,12 @@ spell - spell word(s) using a spelling alphabet.
 {{ .Synopsis }}
 
 == Options
-{{ range $f := .Options }}
-*-{{ $f.Name }}* {{ $f.Type }}:: {{ $f.Usage }} (Default: {{ $f.DefValue }}){{ end }}
+{{ range .Options }}
+*-{{ .Name }}* {{ .Type }}:: {{ .Usage }} (Default: {{ .DefValue }}){{ end }}
 
 == Spelling alphabets
-{{ range $a := .Alphabets}}
-*{{ $a.Tag }}* :: {{ $a.EnglishName }} -- {{ $a.SelfName }}{{ end }}
+{{ range .Alphabets}}
+*{{ .Tag }}* :: {{ .EnglishName }} -- {{ .SelfName }}{{ end }}
 
 == Examples
 
@@ -56,15 +56,15 @@ spell word(s) using a spelling alphabet.
 	{{ .Synopsis }}
 
 == Options
-{{ range $f := .Options }}
-*-{{ $f.Name }}* {{ $f.Type }}:: {{ $f.Usage }} (Default: {{ $f.DefValue }}){{ end }}
+{{ range .Options }}
+*-{{ .Name }}* {{ .Type }}:: {{ .Usage }} (Default: {{ .DefValue }}){{ end }}
 
 == Spelling alphabets
 
 [cols="h,2*"]
 |===
-{{ range $a := .Alphabets}}
-| {{ $a.Tag }} | {{ $a.EnglishName }} | {{ $a.SelfName }}{{ end }}
+{{ range .Alphabets}}
+| {{ .Tag }} | {{ .EnglishName }} | {{ .SelfName }}{{ end }}
 
 |===
 
@@ -80,22 +80,39 @@ Copyright (C) 2020 Simon Nagl. +
 Free use of this software is granted under the terms of the MIT License.
 `
 
+const godocTmpl = `// Spell is a tool to spell word(s) using a spelling alphabet.
+//
+// Usage:
+//     {{ .Synopsis }}
+// Options:{{ range .Options }}
+//     -{{ .Name }}={{ .DefValue }}
+//     	{{ .Usage }}{{ end }}
+// Spelling alphabets:{{ range .Alphabets }}
+//     {{ printf "%-8v" .Tag }}{{ .EnglishName }}{{end}}
+package main
+`
+
 func TestManpage(t *testing.T) {
-	testDoc(t, "README", readmeTmpl)
+	testDoc(t, "../../README.adoc", readmeTmpl)
 }
 
 func TestReadme(t *testing.T) {
-	testDoc(t, "man-page", manpageTemplate)
+	testDoc(t, "../../man-page.adoc", manpageTmpl)
 }
 
-func testDoc(t *testing.T, name string, tmpl string) {
-	committedDoc := readDoc(t, fmt.Sprintf("../../%s.adoc", name))
+func TestGodoc(t *testing.T) {
+	testDoc(t, "doc.go", godocTmpl)
+}
+
+func testDoc(t *testing.T, path string, tmpl string) {
+	committedDoc := readDoc(t, path)
 	generatedDoc := genDoc(t, tmpl)
 
-	generatedFile := fmt.Sprintf("../../%s.generated.adoc", name)
+	generatedFile := path + ".generated"
 	if committedDoc != generatedDoc {
 		writeDoc(t, generatedDoc, generatedFile)
 
+		name := filepath.Base(path)
 		t.Error("The generated", name, "does not match the committed one.",
 			"The", name, "is committed to make it readable.",
 			"The", name, "is generated to reduce duplicate information.",
@@ -103,7 +120,7 @@ func testDoc(t *testing.T, name string, tmpl string) {
 			"Adopt either the generation or the committed file to fix this test.")
 	} else {
 		err := os.Remove(generatedFile)
-		if !os.IsNotExist(err) {
+		if err != nil && !os.IsNotExist(err) {
 			t.Fatal(err)
 		}
 	}
