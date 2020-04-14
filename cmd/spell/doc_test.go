@@ -51,6 +51,10 @@ image:https://coveralls.io/repos/github/simonnagl/spell/badge.svg?branch=master&
 
 spell word(s) using a spelling alphabet.
 
+== Installation
+
+	go install github.com/simonnagl/spell/cmd/spell
+
 == Synopsis
 
 	{{ .Synopsis }}
