@@ -67,9 +67,9 @@ func printUsage() {
 }
 
 type alphabetView struct {
-	tag         string
-	englishName string
-	selfName    string
+	Tag         string
+	EnglishName string
+	SelfName    string
 }
 
 func alphabetViewModel() []alphabetView {
@@ -83,7 +83,7 @@ func alphabetViewModel() []alphabetView {
 	}
 
 	sort.Slice(allAlphabetView, func(i int, j int) bool {
-		return allAlphabetView[i].tag < allAlphabetView[j].tag
+		return allAlphabetView[i].Tag < allAlphabetView[j].Tag
 	})
 
 	return allAlphabetView
@@ -95,15 +95,15 @@ func printAlphabets() {
 
 	var maxKeyLen, maxEnglisLen int
 	for _, f := range allAlphabet {
-		if maxKeyLen < len(f.tag) {
-			maxKeyLen = len(f.tag)
+		if maxKeyLen < len(f.Tag) {
+			maxKeyLen = len(f.Tag)
 		}
-		if maxEnglisLen < len(f.englishName) {
-			maxEnglisLen = len(f.englishName)
+		if maxEnglisLen < len(f.EnglishName) {
+			maxEnglisLen = len(f.EnglishName)
 		}
 	}
 
 	for _, f := range allAlphabet {
-		fmt.Fprintf(flag.CommandLine.Output(), "  %-*v%-*v%s\n", maxKeyLen+1, f.tag, maxEnglisLen+1, f.englishName, f.selfName)
+		fmt.Fprintf(flag.CommandLine.Output(), "  %-*v%-*v%s\n", maxKeyLen+1, f.Tag, maxEnglisLen+1, f.EnglishName, f.SelfName)
 	}
 }
