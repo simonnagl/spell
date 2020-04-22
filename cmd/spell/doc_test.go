@@ -30,7 +30,7 @@ spell - spell word(s) using a spelling alphabet.
 
 == Spelling alphabets
 {{ range .Alphabets}}
-*{{ .Tag }}* :: {{ .EnglishName }}{{ if ne .NormName ""}} -- {{ .NormName }}{{ end }}{{ end }}
+*{{ .LangTag }}* :: {{ .LangEnglishName }}{{ if ne .AltNames ""}} -- {{ .AltNames }}{{ end }}{{ end }}
 
 == Examples
 
@@ -68,7 +68,7 @@ spell word(s) using a spelling alphabet.
 [cols="h,3*"]
 |===
 {{ range .Alphabets}}
-| {{ .Tag }} | {{ .EnglishName }} | {{ .SelfName }} |{{if ne .NormName ""}} {{ .NormName }}{{end}}{{ end }}
+| {{ .LangTag }} | {{ .LangEnglishName }} | {{ .LangSelfName }} |{{if ne .AltNames ""}} {{ .AltNames }}{{end}}{{ end }}
 
 |===
 
@@ -92,7 +92,7 @@ const godocTmpl = `// Spell is a tool to spell word(s) using a spelling alphabet
 //     -{{ .Name }}={{ .DefValue }}
 //     	{{ .Usage }}{{ end }}
 // Spelling alphabets:{{ range .Alphabets }}
-//     {{ printf "%-8v" .Tag }}{{ .EnglishName }}{{end}}
+//     {{ printf "%-8v" .LangTag }}{{ .LangEnglishName }}{{end}}
 package main
 `
 

@@ -67,10 +67,10 @@ func printUsage() {
 }
 
 type alphabetView struct {
-	Tag         string
-	EnglishName string
-	SelfName    string
-	NormName    string
+	LangTag         string
+	LangEnglishName string
+	LangSelfName    string
+	AltNames        string
 }
 
 func alphabetViewModel() []alphabetView {
@@ -81,15 +81,15 @@ func alphabetViewModel() []alphabetView {
 	for _, a := range alphabet.All {
 		lang := a.Lang
 		allAlphabetView = append(allAlphabetView, alphabetView{
-			Tag:         a.Lang.String(),
-			EnglishName: displayEnglish.Name(lang),
-			SelfName:    display.Self.Name(lang),
-			NormName:    strings.Join(a.Names, ", "),
+			LangTag:         a.Lang.String(),
+			LangEnglishName: displayEnglish.Name(lang),
+			LangSelfName:    display.Self.Name(lang),
+			AltNames:        strings.Join(a.Names, ", "),
 		})
 	}
 
 	sort.Slice(allAlphabetView, func(i int, j int) bool {
-		return allAlphabetView[i].Tag < allAlphabetView[j].Tag
+		return allAlphabetView[i].LangTag < allAlphabetView[j].LangTag
 	})
 
 	return allAlphabetView
@@ -99,10 +99,10 @@ func printAlphabets() {
 	allAlphabet := alphabetViewModel()
 
 	for _, f := range allAlphabet {
-		if "" != f.NormName {
-			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v, %v\n", f.Tag, f.EnglishName, f.NormName)
+		if "" != f.AltNames {
+			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v, %v\n", f.LangTag, f.LangEnglishName, f.AltNames)
 		} else {
-			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v\n", f.Tag, f.EnglishName)
+			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v\n", f.LangTag, f.LangEnglishName)
 		}
 	}
 }
