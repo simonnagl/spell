@@ -4,7 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/simonnagl/spell/alphabet"
+	"golang.org/x/text/language"
 	"golang.org/x/text/language/display"
+	"os"
 	"sort"
 	"strings"
 )
@@ -34,8 +36,15 @@ func main() {
 		return
 	}
 
-	a := alphabet.Lookup(*lang)
+	a, c := alphabet.Lookup(*lang)
 	args := strings.Join(flag.Args(), " ")
+
+	switch c {
+	case language.High, language.Low:
+		fmt.Fprintf(os.Stderr, "Info: Guess alphabet '%s' for input '%s':\n", a.Lang, *lang)
+	case language.No:
+		fmt.Fprintf(os.Stderr, "Warning: Found no spelling alphabet for '%s'. Using default '%s':\n", *lang, a.Lang)
+	}
 
 	fmt.Println(a.Spell(args))
 }
