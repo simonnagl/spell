@@ -73,11 +73,12 @@ func TestForLanguageCode(t *testing.T) {
 		{"nl", language.MustParse("nl")},
 		{"fr-CH", language.MustParse("fr")},
 		{"zh", language.MustParse("en")},
+		{"DIN 5009", language.MustParse("de-DE")},
 	}
 
 	for _, test := range allTestCase {
 		t.Run(test.lang, func(t *testing.T) {
-			var alphabet = ForLanguageCode(test.lang)
+			var alphabet = Lookup(test.lang)
 			if test.expected != alphabet.Lang {
 				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet.Lang)
 			}

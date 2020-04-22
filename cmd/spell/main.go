@@ -34,7 +34,7 @@ func main() {
 		return
 	}
 
-	a := alphabet.ForLanguageCode(*lang)
+	a := alphabet.Lookup(*lang)
 	args := strings.Join(flag.Args(), " ")
 
 	fmt.Println(a.Spell(args))
@@ -70,6 +70,7 @@ type alphabetView struct {
 	Tag         string
 	EnglishName string
 	SelfName    string
+	NormName    string
 }
 
 func alphabetViewModel() []alphabetView {
@@ -79,7 +80,12 @@ func alphabetViewModel() []alphabetView {
 
 	for _, a := range alphabet.All {
 		lang := a.Lang
-		allAlphabetView = append(allAlphabetView, alphabetView{lang.String(), displayEnglish.Name(lang), display.Self.Name(lang)})
+		allAlphabetView = append(allAlphabetView, alphabetView{
+			Tag:         a.Lang.String(),
+			EnglishName: displayEnglish.Name(lang),
+			SelfName:    display.Self.Name(lang),
+			NormName:    strings.Join(a.Names, ", "),
+		})
 	}
 
 	sort.Slice(allAlphabetView, func(i int, j int) bool {
@@ -90,20 +96,13 @@ func alphabetViewModel() []alphabetView {
 }
 
 func printAlphabets() {
-
 	allAlphabet := alphabetViewModel()
 
-	var maxKeyLen, maxEnglisLen int
 	for _, f := range allAlphabet {
-		if maxKeyLen < len(f.Tag) {
-			maxKeyLen = len(f.Tag)
+		if "" != f.NormName {
+			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v, %v\n", f.Tag, f.EnglishName, f.NormName)
+		} else {
+			fmt.Fprintf(flag.CommandLine.Output(), "  %-6v%v\n", f.Tag, f.EnglishName)
 		}
-		if maxEnglisLen < len(f.EnglishName) {
-			maxEnglisLen = len(f.EnglishName)
-		}
-	}
-
-	for _, f := range allAlphabet {
-		fmt.Fprintf(flag.CommandLine.Output(), "  %-*v%-*v%s\n", maxKeyLen+1, f.Tag, maxEnglisLen+1, f.EnglishName, f.SelfName)
 	}
 }

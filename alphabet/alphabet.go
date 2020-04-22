@@ -12,7 +12,10 @@ import (
 //
 // SpellingAlphabet is a set of words used to pronounce the letters of an alphabet in oral communication.
 type SpellingAlphabet struct {
+	// BCP 47 language tag, describing where this SpellingAlphabet is used.
 	Lang language.Tag
+	// Additional names to identify this SpellingAlphabet.
+	Names []string
 	// Map lower case keys to their phonetic form.
 	m map[string]string
 	// Language specific case mappings. Can be nil.
@@ -69,11 +72,31 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 	}
 }
 
-// ForLanguageCode finds the best matching SpellingAlphabet for a BCP 47 language tag.
+// Lookup returns the best matching SpellingAlphabet of All.
 //
-// ForLanguageCode uses golang.org/x/text/language for finding the best match.
+// First, Lookup searches for a SpellingAlphabet with a matching name.
+// Second, Lookup tries to interpret key as a BCP 47 language tag and finds the best match for the SpellingAlphabets Lang.
+// golang.org/x/text/language is used for finding the best match.
 // If there is no match, 'en' is used as the default SpellingAlphabet.
-func ForLanguageCode(lang string) SpellingAlphabet {
+func Lookup(key string) SpellingAlphabet {
+	if a, ok := lookupName(key); ok {
+		return a
+	}
+	return lookupLang(key)
+}
+
+func lookupName(key string) (SpellingAlphabet, bool) {
+	for _, alphabet := range All {
+		for _, name := range alphabet.Names {
+			if key == name {
+				return alphabet, true
+			}
+		}
+	}
+	return SpellingAlphabet{}, false
+}
+
+func lookupLang(lang string) SpellingAlphabet {
 
 	tags := make([]language.Tag, 0, len(All))
 	for _, alphabet := range All {
@@ -91,10 +114,11 @@ func ForLanguageCode(lang string) SpellingAlphabet {
 	return All[i]
 }
 
-// All implemented SpellingAlphabet.
+// All SpellingAlphabet.
 var All = []SpellingAlphabet{
-	{ // ICAO / NATO
-		Lang: language.English,
+	{
+		Lang:  language.English,
+		Names: []string{"ICAO", "NATO"},
 		m: map[string]string{
 			"a": "Alfa",
 			"b": "Bravo",
@@ -213,8 +237,9 @@ var All = []SpellingAlphabet{
 			"y": "Ypsilon",
 			"z": "Zaandam",
 		},
-	}, { // DIN5009
-		Lang: language.MustParse("de-DE"),
+	}, {
+		Lang:  language.MustParse("de-DE"),
+		Names: []string{"DIN 5009"},
 		m: map[string]string{
 			"a":   "Anton",
 			"ä":   "Ärger",
@@ -250,8 +275,9 @@ var All = []SpellingAlphabet{
 			"z":   "Zacharias",
 			" ":   "Leerzeichen",
 		},
-	}, { // ÖNORM A 1081
-		Lang: language.MustParse("de-AT"),
+	}, {
+		Lang:  language.MustParse("de-AT"),
+		Names: []string{"ÖNORM A 1081"},
 		m: map[string]string{
 			"a":   "Anton",
 			"ä":   "Ärger",

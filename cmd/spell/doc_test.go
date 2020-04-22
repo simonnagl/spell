@@ -30,7 +30,7 @@ spell - spell word(s) using a spelling alphabet.
 
 == Spelling alphabets
 {{ range .Alphabets}}
-*{{ .Tag }}* :: {{ .EnglishName }} -- {{ .SelfName }}{{ end }}
+*{{ .Tag }}* :: {{ .EnglishName }}{{ if ne .NormName ""}} -- {{ .NormName }}{{ end }}{{ end }}
 
 == Examples
 
@@ -65,10 +65,10 @@ spell word(s) using a spelling alphabet.
 
 == Spelling alphabets
 
-[cols="h,2*"]
+[cols="h,3*"]
 |===
 {{ range .Alphabets}}
-| {{ .Tag }} | {{ .EnglishName }} | {{ .SelfName }}{{ end }}
+| {{ .Tag }} | {{ .EnglishName }} | {{ .SelfName }} |{{if ne .NormName ""}} {{ .NormName }}{{end}}{{ end }}
 
 |===
 
