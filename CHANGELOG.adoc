@@ -1,0 +1,17 @@
+= Changelog
+
+== v0.3.0 (not released yet)
+
+* Added the names of special characters for the spelling aplphabets `en`, `de-DE`, `de-AT` and `de-CH`.
+* Match spelling alphabets by names. Alphabet names identify alphabets by an organisation or standard.
+* Report if the language tag has no exact matching alphabet and `spell` tries to find the best match.
+
+== v0.2.0
+
+* New command line flag `-v` prints version information.
+* Improve `godoc` documentation. It is browsable at https://pkg.go.dev/github.com/simonnagl/spell@v0.2.0[pkg.go.dev]
+
+== v0.1.0
+
+v0.1.0 is the first release of spell.
+The https://github.com/simonnagl/spell/blob/v0.1.0/README.adoc[README] documents the initial features.
