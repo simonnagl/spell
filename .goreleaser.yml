@@ -5,7 +5,8 @@ before:
     # You may remove this if you don't use go modules.
     - go mod download
 builds:
-- env:
+- id: 'spell'
+  env:
   - CGO_ENABLED=0
   main: ./cmd/spell
 archives:
@@ -15,8 +16,19 @@ archives:
     windows: Windows
     386: i386
     amd64: x86_64
+  files:
+    - LICENSE
+    - CHANGELOG*
+    - README*
 checksum:
   name_template: 'checksums.txt'
+dockers:
+  - image_templates:
+      - 'simonnagl/spell:{{ .Tag }}'
+      - 'simonnagl/spell:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - spell
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
