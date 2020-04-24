@@ -95,5 +95,5 @@ Spelling alphabets:
 }
 
 func TestMain_Version(t *testing.T) {
-	testMain(t, "-v", "spell 0.2.0\n")
+	testMain(t, "-v", "spell 0.3.0\n")
 }
