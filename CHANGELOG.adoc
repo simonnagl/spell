@@ -1,6 +1,6 @@
 = Changelog
 
-== v0.3.0 (not released yet)
+== v0.3.0
 
 * Added the names of special characters for the spelling aplphabets `en`, `de-DE`, `de-AT` and `de-CH`.
 * Match spelling alphabets by names. Alphabet names identify alphabets by an organisation or standard.
