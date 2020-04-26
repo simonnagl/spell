@@ -7,7 +7,17 @@ spell word(s) using a spelling alphabet.
 
 == Installation
 
+=== Golang
+
 	go install github.com/simonnagl/spell/cmd/spell
+
+=== Docker
+
+    docker run --rm simonnagl/spell
+
+=== Binary
+
+Download from https://github.com/simonnagl/spell/releases[GitHub Releases].
 
 == Synopsis
 
