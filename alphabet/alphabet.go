@@ -4,6 +4,7 @@ package alphabet
 import (
 	"fmt"
 	"golang.org/x/text/language"
+	"golang.org/x/text/language/display"
 	"strings"
 	"unicode"
 )
@@ -13,13 +14,28 @@ import (
 // SpellingAlphabet is a set of words used to pronounce the letters of an alphabet in oral communication.
 type SpellingAlphabet struct {
 	// BCP 47 language tag, describing where this SpellingAlphabet is used.
-	Lang language.Tag
+	lang language.Tag
 	// Additional names to identify this SpellingAlphabet.
 	Names []string
 	// Map lower case keys to their phonetic form.
 	m map[string]string
 	// Language specific case mappings. Can be nil.
 	c *unicode.SpecialCase
+}
+
+// LangTag returns a BCP 47 tag, describing where SpellingAlphabet is used.
+func (sa SpellingAlphabet) LangTag() string {
+	return sa.lang.String()
+}
+
+// LangEnglishName returns the full description in English, which language uses SpellingAlphabet.
+func (sa SpellingAlphabet) LangEnglishName() string {
+	return display.English.Tags().Name(sa.lang)
+}
+
+// LangEnglishName returns the full description which language uses SpellingAlphabet, in this language.
+func (sa SpellingAlphabet) LangSelfName() string {
+	return display.Self.Name(sa.lang)
 }
 
 // Spell generates the text to speak for spelling text.
@@ -75,12 +91,12 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 // Lookup returns the best matching SpellingAlphabet of All together with a confidence score.
 //
 // First, Lookup searches for a SpellingAlphabet with a matching name.
-// Second, Lookup tries to interpret key as a BCP 47 language tag and finds the best match for the SpellingAlphabets Lang.
+// Second, Lookup tries to interpret key as a BCP 47 language tag and finds the best match for the SpellingAlphabets lang.
 // golang.org/x/text/language is used for finding the best match.
 // If there is no match, 'en' is used as the default SpellingAlphabet.
-func Lookup(key string) (SpellingAlphabet, language.Confidence) {
+func Lookup(key string) (SpellingAlphabet, Exactness) {
 	if a, ok := lookupName(key); ok {
-		return a, language.Exact
+		return a, Exact
 	}
 	return lookupLang(key)
 }
@@ -96,28 +112,28 @@ func lookupName(key string) (alphabet SpellingAlphabet, ok bool) {
 	return SpellingAlphabet{}, false
 }
 
-func lookupLang(lang string) (SpellingAlphabet, language.Confidence) {
+func lookupLang(lang string) (SpellingAlphabet, Exactness) {
 
 	tags := make([]language.Tag, 0, len(All))
 	for _, alphabet := range All {
-		tags = append(tags, alphabet.Lang)
+		tags = append(tags, alphabet.lang)
 	}
 
 	matcher := language.NewMatcher(tags)
 
 	tag, err := language.Parse(lang)
 	if err != nil {
-		return All[0], language.No
+		return All[0], Default
 	}
 	_, i, c := matcher.Match(tag)
 
-	return All[i], c
+	return All[i], FromLangConfidence(c)
 }
 
 // All SpellingAlphabet.
 var All = []SpellingAlphabet{
 	{
-		Lang:  language.English,
+		lang:  language.English,
 		Names: []string{"ICAO", "NATO"},
 		m: map[string]string{
 			"a":  "Alfa",
@@ -193,7 +209,7 @@ var All = []SpellingAlphabet{
 			"^":  "Caret",
 		},
 	}, {
-		Lang: language.BritishEnglish,
+		lang: language.BritishEnglish,
 		m: map[string]string{
 			"a": "Alfred",
 			"b": "Benjamin",
@@ -223,7 +239,7 @@ var All = []SpellingAlphabet{
 			"z": "Zebra",
 		},
 	}, {
-		Lang: language.French,
+		lang: language.French,
 		m: map[string]string{
 			"a": "Anatole",
 			"b": "Berthe",
@@ -253,7 +269,7 @@ var All = []SpellingAlphabet{
 			"z": "Zoé",
 		},
 	}, {
-		Lang: language.Dutch,
+		lang: language.Dutch,
 		m: map[string]string{
 			"a": "Anna/Anton",
 			"b": "Bernard",
@@ -283,7 +299,7 @@ var All = []SpellingAlphabet{
 			"z": "Zaandam",
 		},
 	}, {
-		Lang:  language.MustParse("de-DE"),
+		lang:  language.MustParse("de-DE"),
 		Names: []string{"DIN 5009"},
 		m: map[string]string{
 			"a":   "Anton",
@@ -365,7 +381,7 @@ var All = []SpellingAlphabet{
 			"^":   "Zirkumflex",
 		},
 	}, {
-		Lang:  language.MustParse("de-AT"),
+		lang:  language.MustParse("de-AT"),
 		Names: []string{"ÖNORM A 1081"},
 		m: map[string]string{
 			"a":   "Anton",
@@ -447,7 +463,7 @@ var All = []SpellingAlphabet{
 			"^":   "Zirkumflex",
 		},
 	}, {
-		Lang: language.MustParse("de-CH"),
+		lang: language.MustParse("de-CH"),
 		m: map[string]string{
 			"a":  "Anna",
 			"ä":  "Äsch",
@@ -526,7 +542,7 @@ var All = []SpellingAlphabet{
 			"^":  "Zirkumflex",
 		},
 	}, {
-		Lang: language.Italian,
+		lang: language.Italian,
 		m: map[string]string{
 			"a": "Ancona",
 			"b": "Bari",
@@ -556,7 +572,7 @@ var All = []SpellingAlphabet{
 			"z": "Zara",
 		},
 	}, {
-		Lang: language.Spanish,
+		lang: language.Spanish,
 		m: map[string]string{
 			"a":  "Antonio",
 			"b":  "Burgos",
@@ -589,7 +605,7 @@ var All = []SpellingAlphabet{
 			"z":  "Zaragoza",
 		},
 	}, {
-		Lang: language.Turkish,
+		lang: language.Turkish,
 		m: map[string]string{
 			"a": "Adana",
 			"b": "Bolu",
@@ -624,7 +640,7 @@ var All = []SpellingAlphabet{
 		},
 		c: &unicode.TurkishCase,
 	}, {
-		Lang: language.Norwegian,
+		lang: language.Norwegian,
 		m: map[string]string{
 			"a": "Anna",
 			"å": "Åse",
@@ -656,7 +672,7 @@ var All = []SpellingAlphabet{
 			"y": "Yngling",
 			"z": "Zakarias"},
 	}, {
-		Lang: language.Swedish,
+		lang: language.Swedish,
 		m: map[string]string{
 			"a": "Adam",
 			"å": "Åke",
@@ -690,7 +706,7 @@ var All = []SpellingAlphabet{
 			"z": "Zäta",
 		},
 	}, {
-		Lang: language.Finnish,
+		lang: language.Finnish,
 		m: map[string]string{
 			"a": "Aarne",
 			"ä": "Äiti",
@@ -723,7 +739,7 @@ var All = []SpellingAlphabet{
 			"z": "Tseta",
 		},
 	}, {
-		Lang: language.Danish,
+		lang: language.Danish,
 		m: map[string]string{
 			"a": "Anna",
 			"å": "Åse",
@@ -756,7 +772,7 @@ var All = []SpellingAlphabet{
 			"z": "Zackarias",
 		},
 	}, {
-		Lang: language.Czech,
+		lang: language.Czech,
 		m: map[string]string{
 			"a":  "Adam",
 			"á":  "a s čárkou",
@@ -802,7 +818,7 @@ var All = []SpellingAlphabet{
 			"ž":  "Žofie",
 		},
 	}, {
-		Lang: language.EuropeanPortuguese,
+		lang: language.EuropeanPortuguese,
 		m: map[string]string{
 			"a": "Aveiro",
 			"b": "Braga",
@@ -832,7 +848,7 @@ var All = []SpellingAlphabet{
 			"z": "Zulmira",
 		},
 	}, {
-		Lang: language.BrazilianPortuguese,
+		lang: language.BrazilianPortuguese,
 		m: map[string]string{
 			"a": "Amor",
 			"b": "Bandeira",
@@ -862,7 +878,7 @@ var All = []SpellingAlphabet{
 			"z": "Zebra",
 		},
 	}, {
-		Lang: language.Romanian,
+		lang: language.Romanian,
 		m: map[string]string{
 			"a": "Ana",
 			"b": "Barbu",
@@ -892,7 +908,7 @@ var All = []SpellingAlphabet{
 			"z": "Zahăr",
 		},
 	}, {
-		Lang: language.Slovenian,
+		lang: language.Slovenian,
 		m: map[string]string{
 			"a": "Ankaran",
 			"b": "Bled",

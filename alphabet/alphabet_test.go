@@ -45,7 +45,7 @@ func testSpellAlphabet(t *testing.T, alphabet SpellingAlphabet) {
 
 func TestSpell_Lang(t *testing.T) {
 	for _, a := range All {
-		t.Run(a.Lang.String(), func(t *testing.T) {
+		t.Run(a.lang.String(), func(t *testing.T) {
 			testSpellAlphabet(t, a)
 		})
 	}
@@ -64,24 +64,24 @@ func TestForLanguageCode(t *testing.T) {
 	type TestCase struct {
 		lang               string
 		expected           language.Tag
-		expectedConfidence language.Confidence
+		expectedConfidence Exactness
 	}
 	var allTestCase = []TestCase{
-		{"default", language.MustParse("en"), language.No},
-		{"de-DE", language.MustParse("de-DE"), language.Exact},
-		{"en", language.MustParse("en"), language.Exact},
-		{"fr", language.MustParse("fr"), language.Exact},
-		{"nl", language.MustParse("nl"), language.Exact},
-		{"fr-CH", language.MustParse("fr"), language.High},
-		{"zh", language.MustParse("en"), language.No},
-		{"DIN 5009", language.MustParse("de-DE"), language.Exact},
+		{"default", language.MustParse("en"), Default},
+		{"de-DE", language.MustParse("de-DE"), Exact},
+		{"en", language.MustParse("en"), Exact},
+		{"fr", language.MustParse("fr"), Exact},
+		{"nl", language.MustParse("nl"), Exact},
+		{"fr-CH", language.MustParse("fr"), Guess},
+		{"zh", language.MustParse("en"), Default},
+		{"DIN 5009", language.MustParse("de-DE"), Exact},
 	}
 
 	for _, test := range allTestCase {
 		t.Run(test.lang, func(t *testing.T) {
 			alphabet, confidence := Lookup(test.lang)
-			if test.expected != alphabet.Lang {
-				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet.Lang)
+			if test.expected != alphabet.lang {
+				t.Error("Code", test.lang, "should return\n", test.expected, "but was\n", alphabet.lang)
 			}
 			if test.expectedConfidence != confidence {
 				t.Error("Code", test.lang, "should return", test.expected,

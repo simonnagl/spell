@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/simonnagl/spell/alphabet"
-	"golang.org/x/text/language"
-	"golang.org/x/text/language/display"
 	"os"
 	"sort"
 	"strings"
@@ -36,14 +34,14 @@ func main() {
 		return
 	}
 
-	a, c := alphabet.Lookup(*lang)
+	a, e := alphabet.Lookup(*lang)
 	args := strings.Join(flag.Args(), " ")
 
-	switch c {
-	case language.High, language.Low:
-		fmt.Fprintf(os.Stderr, "Info: Guess alphabet '%s' for input '%s':\n", a.Lang, *lang)
-	case language.No:
-		fmt.Fprintf(os.Stderr, "Warning: Found no spelling alphabet for '%s'. Using default '%s':\n", *lang, a.Lang)
+	switch e {
+	case alphabet.Guess:
+		fmt.Fprintf(os.Stderr, "Info: Guess alphabet '%s' for input '%s':\n", a.LangTag(), *lang)
+	case alphabet.Default:
+		fmt.Fprintf(os.Stderr, "Warning: Found no spelling alphabet for '%s'. Using default '%s':\n", *lang, a.LangTag())
 	}
 
 	fmt.Println(a.Spell(args))
@@ -85,14 +83,12 @@ type alphabetView struct {
 func alphabetViewModel() []alphabetView {
 
 	allAlphabetView := make([]alphabetView, 0, len(alphabet.All))
-	var displayEnglish = display.English.Tags()
 
 	for _, a := range alphabet.All {
-		lang := a.Lang
 		allAlphabetView = append(allAlphabetView, alphabetView{
-			LangTag:         a.Lang.String(),
-			LangEnglishName: displayEnglish.Name(lang),
-			LangSelfName:    display.Self.Name(lang),
+			LangTag:         a.LangTag(),
+			LangEnglishName: a.LangEnglishName(),
+			LangSelfName:    a.LangSelfName(),
 			AltNames:        strings.Join(a.Names, ", "),
 		})
 	}
