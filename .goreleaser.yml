@@ -6,9 +6,16 @@ before:
     - go mod download
 builds:
 - id: 'spell'
-  env:
-  - CGO_ENABLED=0
   main: ./cmd/spell
+  goos:
+    - linux
+    - windows
+- id: 'spell-apple'
+  main: ./cmd/spell
+  goos:
+    - darwin
+  hooks:
+    post: gon gon.hcl
 archives:
 - replacements:
     darwin: Darwin
