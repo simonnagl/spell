@@ -22,6 +22,9 @@ archives:
     - README*
 checksum:
   name_template: 'checksums.txt'
+signs:
+  - artifacts: checksum
+    args: ["-u", "0CDF7B08E8157B1B", "--output", "${signature}", "--detach-sign", "${artifact}"]
 dockers:
   - image_templates:
       - 'simonnagl/spell:{{ .Tag }}'
