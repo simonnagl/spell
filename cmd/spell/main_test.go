@@ -32,7 +32,7 @@ func testMain(t *testing.T, arg string, expected string) {
 	}
 
 	if expected != o {
-		t.Errorf("Expected usage does not match.\ngot:\n%s\nwant:\n%s", o, expected)
+		t.Errorf("Expected output does not match.\ngot:\n%s\nwant:\n%s", o, expected)
 	}
 }
 
@@ -42,10 +42,13 @@ func captureOutput(f func()) (string, error) {
 		return "", err
 	}
 
-	var stderr = os.Stderr
+	stderr := os.Stderr
+	stdout := os.Stdout
 	os.Stderr = w
+	os.Stdout = w
 	defer func() {
 		os.Stderr = stderr
+		os.Stdout = stdout
 	}()
 
 	f()
@@ -96,4 +99,8 @@ Spelling alphabets:
 
 func TestMain_Version(t *testing.T) {
 	testMain(t, "-v", "spell 0.3.0\n")
+}
+
+func TestMain_Spell(t *testing.T) {
+	testMain(t, "abc", "Alfa Bravo Charlie\n")
 }
