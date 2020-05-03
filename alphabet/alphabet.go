@@ -137,7 +137,29 @@ func lookupLang(lang string) (SpellingAlphabet, Exactness) {
 
 // All SpellingAlphabet.
 var All = []SpellingAlphabet{
-	{
+	English,
+	BritishEnglish,
+	French,
+	Dutch,
+	German,
+	AustrianGerman,
+	SwissHighGerman,
+	Italian,
+	Spanish,
+	Turkish,
+	Norwegian,
+	Swedish,
+	Finnish,
+	Danish,
+	Czech,
+	EuropeanPortuguese,
+	BrazilianPortuguese,
+	Romanian,
+	Slovenian,
+}
+
+var (
+	English = SpellingAlphabet{
 		lang:  language.English,
 		names: []string{"ICAO", "NATO"},
 		m: map[string]string{
@@ -213,7 +235,8 @@ var All = []SpellingAlphabet{
 			"%":  "Percent Sign",
 			"^":  "Caret",
 		},
-	}, {
+	}
+	BritishEnglish = SpellingAlphabet{
 		lang: language.BritishEnglish,
 		m: map[string]string{
 			"a": "Alfred",
@@ -243,7 +266,8 @@ var All = []SpellingAlphabet{
 			"y": "Yellow",
 			"z": "Zebra",
 		},
-	}, {
+	}
+	French = SpellingAlphabet{
 		lang: language.French,
 		m: map[string]string{
 			"a": "Anatole",
@@ -273,7 +297,8 @@ var All = []SpellingAlphabet{
 			"y": "Yvonne",
 			"z": "Zoé",
 		},
-	}, {
+	}
+	Dutch = SpellingAlphabet{
 		lang: language.Dutch,
 		m: map[string]string{
 			"a": "Anna/Anton",
@@ -303,7 +328,8 @@ var All = []SpellingAlphabet{
 			"y": "Ypsilon",
 			"z": "Zaandam",
 		},
-	}, {
+	}
+	German = SpellingAlphabet{
 		lang:  language.MustParse("de-DE"),
 		names: []string{"DIN 5009"},
 		m: map[string]string{
@@ -385,7 +411,8 @@ var All = []SpellingAlphabet{
 			"%":   "Prozentzeichen",
 			"^":   "Zirkumflex",
 		},
-	}, {
+	}
+	AustrianGerman = SpellingAlphabet{
 		lang:  language.MustParse("de-AT"),
 		names: []string{"ÖNORM A 1081"},
 		m: map[string]string{
@@ -467,7 +494,8 @@ var All = []SpellingAlphabet{
 			"%":   "Prozentzeichen",
 			"^":   "Zirkumflex",
 		},
-	}, {
+	}
+	SwissHighGerman = SpellingAlphabet{
 		lang: language.MustParse("de-CH"),
 		m: map[string]string{
 			"a":  "Anna",
@@ -546,7 +574,8 @@ var All = []SpellingAlphabet{
 			"%":  "Prozentzeichen",
 			"^":  "Zirkumflex",
 		},
-	}, {
+	}
+	Italian = SpellingAlphabet{
 		lang: language.Italian,
 		m: map[string]string{
 			"a": "Ancona",
@@ -576,7 +605,8 @@ var All = []SpellingAlphabet{
 			"y": "Ipsilon",
 			"z": "Zara",
 		},
-	}, {
+	}
+	Spanish = SpellingAlphabet{
 		lang: language.Spanish,
 		m: map[string]string{
 			"a":  "Antonio",
@@ -609,7 +639,8 @@ var All = []SpellingAlphabet{
 			"y":  "Yolanda",
 			"z":  "Zaragoza",
 		},
-	}, {
+	}
+	Turkish = SpellingAlphabet{
 		lang: language.Turkish,
 		m: map[string]string{
 			"a": "Adana",
@@ -644,7 +675,8 @@ var All = []SpellingAlphabet{
 			"z": "Yozgat",
 		},
 		c: &unicode.TurkishCase,
-	}, {
+	}
+	Norwegian = SpellingAlphabet{
 		lang: language.Norwegian,
 		m: map[string]string{
 			"a": "Anna",
@@ -676,7 +708,8 @@ var All = []SpellingAlphabet{
 			"x": "Xerxes",
 			"y": "Yngling",
 			"z": "Zakarias"},
-	}, {
+	}
+	Swedish = SpellingAlphabet{
 		lang: language.Swedish,
 		m: map[string]string{
 			"a": "Adam",
@@ -710,7 +743,8 @@ var All = []SpellingAlphabet{
 			"y": "Yngve",
 			"z": "Zäta",
 		},
-	}, {
+	}
+	Finnish = SpellingAlphabet{
 		lang: language.Finnish,
 		m: map[string]string{
 			"a": "Aarne",
@@ -743,7 +777,8 @@ var All = []SpellingAlphabet{
 			"y": "Yrjö",
 			"z": "Tseta",
 		},
-	}, {
+	}
+	Danish = SpellingAlphabet{
 		lang: language.Danish,
 		m: map[string]string{
 			"a": "Anna",
@@ -776,7 +811,8 @@ var All = []SpellingAlphabet{
 			"y": "Yrsa",
 			"z": "Zackarias",
 		},
-	}, {
+	}
+	Czech = SpellingAlphabet{
 		lang: language.Czech,
 		m: map[string]string{
 			"a":  "Adam",
@@ -822,7 +858,8 @@ var All = []SpellingAlphabet{
 			"z":  "Zuzana",
 			"ž":  "Žofie",
 		},
-	}, {
+	}
+	EuropeanPortuguese = SpellingAlphabet{
 		lang: language.EuropeanPortuguese,
 		m: map[string]string{
 			"a": "Aveiro",
@@ -852,7 +889,8 @@ var All = []SpellingAlphabet{
 			"y": "York",
 			"z": "Zulmira",
 		},
-	}, {
+	}
+	BrazilianPortuguese = SpellingAlphabet{
 		lang: language.BrazilianPortuguese,
 		m: map[string]string{
 			"a": "Amor",
@@ -882,7 +920,8 @@ var All = []SpellingAlphabet{
 			"y": "Yolanda",
 			"z": "Zebra",
 		},
-	}, {
+	}
+	Romanian = SpellingAlphabet{
 		lang: language.Romanian,
 		m: map[string]string{
 			"a": "Ana",
@@ -912,7 +951,8 @@ var All = []SpellingAlphabet{
 			"y": "I grec",
 			"z": "Zahăr",
 		},
-	}, {
+	}
+	Slovenian = SpellingAlphabet{
 		lang: language.Slovenian,
 		m: map[string]string{
 			"a": "Ankaran",
@@ -945,5 +985,5 @@ var All = []SpellingAlphabet{
 			"z": "Zalog",
 			"ž": "Žalec",
 		},
-	},
-}
+	}
+)
