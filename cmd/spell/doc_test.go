@@ -47,7 +47,7 @@ Free use of this software is granted under the terms of the MIT License.
 const readmeTmpl = `= spell
 
 image:https://github.com/simonnagl/spell/workflows/Go/badge.svg[Go,link=https://github.com/simonnagl/spell/actions?query=branch:master]
-image:https://coveralls.io/repos/github/simonnagl/spell/badge.svg?branch=master&t=47TqXT[Coverage Status,link=https://coveralls.io/github/simonnagl/spell?branch=master]
+image:https://coveralls.io/repos/github/simonnagl/spell/badge.svg[Coverage Status,link=https://coveralls.io/github/simonnagl/spell]
 
 spell word(s) using a spelling alphabet.
 
