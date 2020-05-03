@@ -89,7 +89,7 @@ func alphabetViewModel() []alphabetView {
 			LangTag:         a.LangTag(),
 			LangEnglishName: a.LangEnglishName(),
 			LangSelfName:    a.LangSelfName(),
-			AltNames:        strings.Join(a.Names, ", "),
+			AltNames:        strings.Join(a.Names(), ", "),
 		})
 	}
 

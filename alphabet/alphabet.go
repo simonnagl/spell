@@ -15,12 +15,17 @@ import (
 type SpellingAlphabet struct {
 	// BCP 47 language tag, describing where this SpellingAlphabet is used.
 	lang language.Tag
-	// Additional names to identify this SpellingAlphabet.
-	Names []string
+	// Additional names of organisations or standards, defining or using this SpellingAlphabet.
+	names []string
 	// Map lower case keys to their phonetic form.
 	m map[string]string
 	// Language specific case mappings. Can be nil.
 	c *unicode.SpecialCase
+}
+
+// Names of organisations or standards, defining or using this SpellingAlphabet.
+func (sa SpellingAlphabet) Names() []string {
+	return sa.names
 }
 
 // LangTag returns a BCP 47 tag, describing where SpellingAlphabet is used.
@@ -103,7 +108,7 @@ func Lookup(key string) (SpellingAlphabet, Exactness) {
 
 func lookupName(key string) (alphabet SpellingAlphabet, ok bool) {
 	for _, alphabet := range All {
-		for _, name := range alphabet.Names {
+		for _, name := range alphabet.Names() {
 			if key == name {
 				return alphabet, true
 			}
@@ -134,7 +139,7 @@ func lookupLang(lang string) (SpellingAlphabet, Exactness) {
 var All = []SpellingAlphabet{
 	{
 		lang:  language.English,
-		Names: []string{"ICAO", "NATO"},
+		names: []string{"ICAO", "NATO"},
 		m: map[string]string{
 			"a":  "Alfa",
 			"b":  "Bravo",
@@ -300,7 +305,7 @@ var All = []SpellingAlphabet{
 		},
 	}, {
 		lang:  language.MustParse("de-DE"),
-		Names: []string{"DIN 5009"},
+		names: []string{"DIN 5009"},
 		m: map[string]string{
 			"a":   "Anton",
 			"ä":   "Ärger",
@@ -382,7 +387,7 @@ var All = []SpellingAlphabet{
 		},
 	}, {
 		lang:  language.MustParse("de-AT"),
-		Names: []string{"ÖNORM A 1081"},
+		names: []string{"ÖNORM A 1081"},
 		m: map[string]string{
 			"a":   "Anton",
 			"ä":   "Ärger",
