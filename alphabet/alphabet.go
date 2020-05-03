@@ -95,30 +95,10 @@ func (sa SpellingAlphabet) spellFirstMatch(key string) (string, string) {
 
 // Lookup returns the best matching SpellingAlphabet of All together with a confidence score.
 //
-// First, Lookup searches for a SpellingAlphabet with a matching name.
-// Second, Lookup tries to interpret key as a BCP 47 language tag and finds the best match for the SpellingAlphabets lang.
+// Lookup interprets lang as a BCP 47 language tag and finds the best match for the SpellingAlphabets lang.
 // golang.org/x/text/language is used for finding the best match.
 // If there is no match, 'en' is used as the default SpellingAlphabet.
-func Lookup(key string) (SpellingAlphabet, Exactness) {
-	if a, ok := lookupName(key); ok {
-		return a, Exact
-	}
-	return lookupLang(key)
-}
-
-func lookupName(key string) (alphabet SpellingAlphabet, ok bool) {
-	for _, alphabet := range All {
-		for _, name := range alphabet.Names() {
-			if key == name {
-				return alphabet, true
-			}
-		}
-	}
-	return SpellingAlphabet{}, false
-}
-
-func lookupLang(lang string) (SpellingAlphabet, Exactness) {
-
+func Lookup(lang string) (SpellingAlphabet, Exactness) {
 	tags := make([]language.Tag, 0, len(All))
 	for _, alphabet := range All {
 		tags = append(tags, alphabet.lang)

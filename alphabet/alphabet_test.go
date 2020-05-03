@@ -74,7 +74,6 @@ func TestForLanguageCode(t *testing.T) {
 		{"nl", language.MustParse("nl"), Exact},
 		{"fr-CH", language.MustParse("fr"), Guess},
 		{"zh", language.MustParse("en"), Default},
-		{"DIN 5009", language.MustParse("de-DE"), Exact},
 	}
 
 	for _, test := range allTestCase {
