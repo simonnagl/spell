@@ -32,6 +32,16 @@ checksum:
 signs:
   - artifacts: checksum
     args: ["-u", "0CDF7B08E8157B1B", "--output", "${signature}", "--detach-sign", "${artifact}"]
+brews:
+  - name: spell
+    github:
+      owner: simonnagl
+      name: homebrew
+    commit_author:
+      name: Simon Nagl
+      email: simon.nagl@gmx.de
+    caveats: "Check spell -h"
+    description: "spell word(s) using a spelling alphabet."
 dockers:
   - image_templates:
       - 'simonnagl/spell:{{ .Tag }}'
