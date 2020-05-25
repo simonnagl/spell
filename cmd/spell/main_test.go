@@ -90,9 +90,11 @@ Spelling alphabets:
   pt-BR Brazilian Portuguese
   pt-PT European Portuguese
   ro    Romanian
+  ru    Russian
   sl    Slovenian
   sv    Swedish
   tr    Turkish
+  uk    Ukrainian
 `
 	testMain(t, "-h", e)
 }
