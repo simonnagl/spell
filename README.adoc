@@ -50,9 +50,11 @@ Download from https://github.com/simonnagl/spell/releases[GitHub Releases].
 | pt-BR | Brazilian Portuguese | português |
 | pt-PT | European Portuguese | português europeu |
 | ro | Romanian | română |
+| ru | Russian | русский |
 | sl | Slovenian | slovenščina |
 | sv | Swedish | svenska |
 | tr | Turkish | Türkçe |
+| uk | Ukrainian | українська |
 
 |===
 
